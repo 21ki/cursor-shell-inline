@@ -1,0 +1,63 @@
+{
+  "publisher": "local-dev",
+  "name": "shell-inline",
+  "displayName": "Shell Inline - 多行转单行",
+  "description": "将多行 Shell 命令（反斜杠续行）转换为单行命令",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Formatters"
+  ],
+  "activationEvents": [],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "shell-inline.joinLines",
+        "title": "Shell: 多行合并为单行"
+      },
+      {
+        "command": "shell-inline.splitLines",
+        "title": "Shell: 单行拆分为多行"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorHasSelection",
+          "command": "shell-inline.joinLines",
+          "group": "1_modification@1"
+        },
+        {
+          "when": "editorHasSelection",
+          "command": "shell-inline.splitLines",
+          "group": "1_modification@2"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "shell-inline.joinLines",
+        "key": "ctrl+shift+j",
+        "mac": "cmd+shift+j",
+        "when": "editorHasSelection"
+      },
+      {
+        "command": "shell-inline.splitLines",
+        "key": "ctrl+shift+k",
+        "mac": "cmd+shift+k",
+        "when": "editorHasSelection"
+      }
+    ]
+  },
+  "scripts": {
+    "package": "npx @vscode/vsce package --no-dependencies",
+    "release:patch": "npm version patch && git push origin main --tags",
+    "release:minor": "npm version minor && git push origin main --tags"
+  },
+  "devDependencies": {
+    "@vscode/vsce": "^2.32.0"
+  }
+}
