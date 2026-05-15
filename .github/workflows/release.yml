@@ -3,7 +3,11 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'          # 推 v1.0.0 这样的 tag 时触发
+      - 'v*'
+
+# ✅ 加这个，显式授权写 Release 的权限
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -28,4 +32,4 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: '*.vsix'
-          generate_release_notes: true   # 自动生成 Release 说明
+          generate_release_notes: true
