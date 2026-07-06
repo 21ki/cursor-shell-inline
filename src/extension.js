@@ -100,7 +100,42 @@ function activate(context) {
     }
   );
 
-  context.subscriptions.push(joinCmd, splitCmd);
+  // ── 右键运行：在集成终端中执行选中的 Shell 命令 ──────────────
+  const runCmd = vscode.commands.registerCommand(
+    "shell-inline.runInTerminal",
+    () => {
+      const editor = vscode.window.activeTextEditor;
+      if (!editor) return;
+
+      const { selection } = editor;
+      let selectedText;
+
+      if (selection.isEmpty) {
+        // 未选中时，取光标所在整行
+        selectedText = editor.document.lineAt(selection.active.line).text;
+      } else {
+        selectedText = editor.document.getText(selection);
+      }
+
+      if (!selectedText || !selectedText.trim()) {
+        vscode.window.showWarningMessage("没有可运行的命令");
+        return;
+      }
+
+      // 支持多行反斜杠续行的命令，先合并为单行再执行
+      const command = joinShellLines(selectedText);
+
+      // 复用当前已打开的终端，否则新建一个
+      const terminal =
+        vscode.window.activeTerminal ||
+        vscode.window.createTerminal("Shell Inline");
+
+      terminal.show();
+      terminal.sendText(command, true);
+    }
+  );
+
+  context.subscriptions.push(joinCmd, splitCmd, runCmd);
 }
 
 function deactivate() {}

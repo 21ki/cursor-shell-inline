@@ -21,6 +21,10 @@
       {
         "command": "shell-inline.splitLines",
         "title": "Shell: 单行拆分为多行"
+      },
+      {
+        "command": "shell-inline.runInTerminal",
+        "title": "Shell: 在终端中运行选中命令"
       }
     ],
     "menus": {
@@ -34,6 +38,11 @@
           "when": "editorHasSelection",
           "command": "shell-inline.splitLines",
           "group": "1_modification@2"
+        },
+        {
+          "when": "editorTextFocus",
+          "command": "shell-inline.runInTerminal",
+          "group": "1_modification@3"
         }
       ]
     },
@@ -49,6 +58,12 @@
         "key": "ctrl+shift+k",
         "mac": "cmd+shift+k",
         "when": "editorHasSelection"
+      },
+      {
+        "command": "shell-inline.runInTerminal",
+        "key": "ctrl+shift+r",
+        "mac": "cmd+shift+r",
+        "when": "editorTextFocus"
       }
     ]
   },
