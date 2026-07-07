@@ -8,6 +8,7 @@ on:
 # ✅ 加这个，显式授权写 Release 的权限
 permissions:
   contents: write
+  id-token: write   # Trusted Publishing (OIDC) 需要这个权限
 
 jobs:
   build:
@@ -20,16 +21,23 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: npm install
 
+      - name: Update npm CLI (trusted publishing needs npm >= 11.5.1)
+        run: npm install -g npm@latest
+
       - name: Package Extension
-        run: npx @vscode/vsce package --no-dependencies
+        run: npx @vscode/vsce package --no-dependencies -o shell-inline.vsix
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: '*.vsix'
           generate_release_notes: true
+
+      - name: Publish to npm
+        run: npm publish --access public

@@ -12,6 +12,13 @@
   ],
   "activationEvents": [],
   "main": "./src/extension.js",
+  "bin": {
+    "shell-inline": "./bin/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/21ki/cursor-shell-inline.git"
+  },
   "contributes": {
     "commands": [
       {
@@ -69,6 +76,8 @@
   },
   "scripts": {
     "package": "npx @vscode/vsce package --no-dependencies",
+    "build:dist": "mkdir -p dist && npx @vscode/vsce package --no-dependencies --allow-unused-files-pattern -o dist/shell-inline.vsix",
+    "prepublishOnly": "npm run build:dist",
     "release:patch": "npm version patch && git push origin main --tags",
     "release:minor": "npm version minor && git push origin main --tags"
   },
